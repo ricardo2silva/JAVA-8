@@ -1,9 +1,8 @@
 package com.desafios.codeforces.logicaprogramacao.java8;
 
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class Curso {
 
@@ -68,5 +67,46 @@ public class Stream {
                 .forEach(x -> System.out.println(x));
 
         cursos.stream().filter(c -> c.getAlunos() > 50).map(Curso::getAlunos).forEach(System.out::println);
+        System.out.println("--------------------");
+
+        // o Optional permite que trabalhemos com referencias null, onde nao precisamos perguntar se aquela referencia é igual a null (if(algumaCoisa === null))
+        Optional<Curso> cursoOpt = cursos.stream().filter(c -> c.getAlunos() >= 100).findAny();
+
+        // devolva um curso ou retorne um null
+        Curso curso = cursoOpt.orElse(null);
+        System.out.println(curso.getNome());
+        System.out.println("---------------------");
+
+        cursos.stream().filter(c -> c.getAlunos() > 100).findAny().ifPresent(c -> System.out.println(c.getNome()));
+        System.out.println("&&&&&&&&&&&&&&&&&&&&&&&");
+
+        // dado uma lista filtra por alunos menor ou igual a 100 e guarda em uma nova collection
+        List<Curso> novaLista = cursos.stream().filter(c -> c.getAlunos() <= 100).collect(Collectors.toList());
+        novaLista.forEach(c -> System.out.println(c.getNome()));
+
+
+        // dado uma lista filtra por alunos menor ou igual a 100 e guarda em uma nova collection
+        Map<String, Integer> map = cursos.stream().filter(c -> c.getAlunos() <= 100).collect(Collectors.toMap(c -> c.getNome(), c -> c.getAlunos()));
+        System.out.println(map);
+        System.out.println("-----------------------------");
+
+        cursos.stream().filter(c -> c.getAlunos() <= 100).collect(Collectors.toMap(c -> c.getNome(), c -> c.getAlunos()))
+                .forEach((nome, alunos) -> System.out.println(nome + " tem " + alunos + " alunos"));
+
+        System.out.println("----------------------------");
+        Optional<Curso> first = cursos.stream()
+                .filter(c -> c.getAlunos() > 50)
+                .findFirst();
+
+        Curso primeiro = first.orElse(null);
+        System.out.println(primeiro.getNome());
+
+        System.out.println("----------------------------");
+        //dado uma lista de curso tire a média
+        OptionalDouble average = cursos.stream()
+                .mapToInt(c -> c.getAlunos())
+                .average();
+
+        System.out.println(average);
     }
 }
